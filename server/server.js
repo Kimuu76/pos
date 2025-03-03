@@ -1170,7 +1170,7 @@ if (process.env.NODE_ENV === "production") {
 const startServer = async () => {
 	try {
 		await sequelize.authenticate();
-		console.log("✅ Connected to SQL Server successfully!");
+		console.log("✅ Connected to MySQL Server successfully!");
 
 		await sequelize.sync({ alter: true }); // Ensure database schema updates without data loss
 
