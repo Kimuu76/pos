@@ -5,11 +5,11 @@ const { Sequelize } = require("sequelize");
 
 // Initialize Sequelize with environment variables or defaults
 const sequelize = new Sequelize(
-	process.env.DB_NAME || "sql3765794",
-	process.env.DB_USER || "sql3765794",
-	process.env.DB_PASSWORD || "EQL8y3SI7n",
+	process.env.DB_NAME || "sql7765861",
+	process.env.DB_USER || "sql7765861",
+	process.env.DB_PASSWORD || "PWjTgtM14U",
 	{
-		host: process.env.DB_HOST || "sql3.freesqldatabase.com",
+		host: process.env.DB_HOST || "sql7.freesqldatabase.com",
 		dialect: "mysql",
 		port: process.env.DB_PORT || 3306,
 		logging: false,
