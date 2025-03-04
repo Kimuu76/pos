@@ -57,7 +57,7 @@ app.post("/setup", async (req, res) => {
 	try {
 		console.log("Received Setup Data:", req.body); // ✅ Debugging
 
-		const { name, secretKey } = req.body;
+		const { companyName, secretKey } = req.body;
 
 		// Prevent duplicate setup
 		const existingCompany = await Company.findOne();
@@ -66,7 +66,7 @@ app.post("/setup", async (req, res) => {
 		}
 
 		// ✅ Validate input
-		if (!name || !secretKey) {
+		if (!companyName || !secretKey) {
 			return res
 				.status(400)
 				.json({ error: "Company Name and Secret Key are required!" });
@@ -76,13 +76,17 @@ app.post("/setup", async (req, res) => {
 		//const hashedKey = await bcrypt.hash(secretKey, 10);
 
 		// ✅ Store company details
-		const company = await Company.create({ name, secretKey });
+		const company = await Company.create({ name: companyName, secretKey });
 
 		res.json({ message: "Company setup successful!", company });
 	} catch (error) {
 		console.error("Setup Error:", error);
 		res.status(500).json({ error: "Failed to setup company!" });
 	}
+});
+
+app.get("/setup", async (req, res) => {
+	res.send("Setup endpoint is working!");
 });
 
 // ✅ Login with Secret Key
