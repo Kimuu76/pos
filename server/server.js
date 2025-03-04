@@ -52,11 +52,12 @@ app.get("/company", async (req, res) => {
 });
 
 // ✅ Setup Company (Save Name & Encrypted Secret Key)
+
 app.post("/setup", async (req, res) => {
 	try {
 		console.log("Received Setup Data:", req.body); // ✅ Debugging
 
-		const { companyName, secretKey } = req.body;
+		const { name, secretKey } = req.body;
 
 		// Prevent duplicate setup
 		const existingCompany = await Company.findOne();
@@ -65,7 +66,7 @@ app.post("/setup", async (req, res) => {
 		}
 
 		// ✅ Validate input
-		if (!companyName || !secretKey) {
+		if (!name || !secretKey) {
 			return res
 				.status(400)
 				.json({ error: "Company Name and Secret Key are required!" });
@@ -75,7 +76,7 @@ app.post("/setup", async (req, res) => {
 		//const hashedKey = await bcrypt.hash(secretKey, 10);
 
 		// ✅ Store company details
-		const company = await Company.create({ name: companyName, secretKey });
+		const company = await Company.create({ name, secretKey });
 
 		res.json({ message: "Company setup successful!", company });
 	} catch (error) {
@@ -242,66 +243,6 @@ const generateReceipt = (sale) => {
 };
 
 // Add a sale
-/*app.post("/sales", async (req, res) => {
-	try {
-		const { productId, quantity } = req.body;
-		const product = await Product.findByPk(productId);
-		const totalAmount = quantity * product.sellingPrice;
-
-		// Ensure all fields are present
-		if (!productId || !quantity || quantity <= 0) {
-			return res.status(400).json({ error: "All fields are required!" });
-		}
-		if (product.stock < quantity) {
-			return res
-				.status(400)
-				.json({ error: `⚠️ Not enough stock! Available: ${product.stock}` });
-		}
-		if (!product.sellingPrice || product.sellingPrice <= 0) {
-			return res.status(400).json({ error: "⚠️ Selling price is not set!" });
-		}
-
-		// ✅ Ensure stock is available
-		if (product.stock < quantity) {
-			return res.status(400).json({ error: "⚠ Not enough stock!" });
-		}
-		const sellingPricePerUnit = product.sellingPrice;
-
-		const sale = await Sales.create({
-			productId,
-			productName: product.name,
-			quantity,
-			sellingPricePerUnit,
-			totalAmount,
-		});
-
-		// Reduce stock
-		product.stock -= quantity;
-		await product.save();
-
-		// ✅ Generate receipt
-		const receipt = {
-			receiptNumber: `RCPT-${Date.now()}`,
-			date: new Date().toLocaleString(),
-			items: [
-				{
-					productName: product.name,
-					quantity,
-					pricePerUnit: product.sellingPrice,
-					total: totalAmount,
-				},
-			],
-			totalAmount,
-		};
-		console.log("🔍 Receipt generated:", receipt);
-
-		console.log("Receipt generated:", receipt); // ✅ Log to check
-		res.json({ message: "Sale recorded!", receipt, Sales });
-	} catch (error) {
-		console.error("Error processing sale:", error);
-		res.status(500).json({ error: "Failed to process sale" });
-	}
-});*/
 
 //add sale
 app.post("/sales", async (req, res) => {
@@ -1115,40 +1056,6 @@ app.get("/dashboard", async (req, res) => {
 	}
 });
 
-/*app.get("/dashboard", async (req, res) => {
-	const totalSales = (await Sales.sum("totalAmount")) || 0;
-	const totalPurchases = (await Purchase.sum("totalAmount")) || 0;
-	const salesReturns = (await SalesReturns.sum("refundamount")) || 0;
-	const purchasesReturns = (await PurchaseReturns.sum("refundAmount")) || 0;
-
-	// Fetch sales & purchases by date (Last 7 days)
-	const salesByDate = await Sales.findAll({
-		attributes: [
-			[Sequelize.fn("DATE", Sequelize.col("createdAt")), "date"],
-			[Sequelize.fn("SUM", Sequelize.col("totalAmount")), "sales"],
-		],
-		group: ["date"],
-		order: [["date", "ASC"]],
-	});
-	const purchasesByDate = await Purchase.findAll({
-		attributes: [
-			[Sequelize.fn("DATE", Sequelize.col("createdAt")), "date"],
-			[Sequelize.fn("SUM", Sequelize.col("totalAmount")), "purchases"],
-		],
-		group: ["date"],
-		order: [["date", "ASC"]],
-	});
-
-	res.json({
-		totalSales,
-		totalPurchases,
-		salesReturns,
-		purchasesReturns,
-		purchasesByDate,
-		salesByDate,
-	});
-});*/
-
 // Start server
 const PORT = process.env.PORT || 5000;
 
@@ -1170,7 +1077,7 @@ if (process.env.NODE_ENV === "production") {
 const startServer = async () => {
 	try {
 		await sequelize.authenticate();
-		console.log("✅ Connected to MySQL Server successfully!");
+		console.log("✅ Connected to mySQL Server successfully!");
 
 		await sequelize.sync({ alter: true }); // Ensure database schema updates without data loss
 

@@ -1,40 +1,34 @@
 /** @format */
 
-require("dotenv").config(); // Load .env file
+require("dotenv").config(); // Load environment variables
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize({
-	dialect: "mysql",
-	host: process.env.DB_HOST || "sql8.freesqldatabase.com",
-	port: process.env.DB_PORT || 3306,
-	username: process.env.DB_USER || "sql8765782",
-	password: process.env.DB_PASSWORD || "as5VGpWP7f",
-	database: process.env.DB_NAME || "sql8765782",
-	logging: false,
-});
+const sequelize = new Sequelize(
+	process.env.DB_NAME || "sql3765794",
+	process.env.DB_USER || "sql3765794",
+	process.env.DB_PASSWORD || "EQL8y3SI7n",
+	{
+		host: process.env.DB_HOST || "sql3.freesqldatabase.com",
+		dialect: "mysql",
+		port: process.env.DB_PORT || 3306,
+		logging: false,
+		define: {
+			freezeTableName: false, // ✅ Ensures Sequelize uses pluralized table names
+		},
+		dialectOptions: {
+			// SSL options (if needed)
+		},
+	}
+);
+
+// Test the connection to ensure it works
+sequelize
+	.authenticate()
+	.then(() => {
+		console.log("Database connection successful.");
+	})
+	.catch((error) => {
+		console.error("Unable to connect to the database:", error);
+	});
 
 module.exports = sequelize;
-
-/** @format 
-
-require("dotenv").config(); // Load .env file
-
-const { Sequelize } = require("sequelize");
-
-const sequelize = new Sequelize({
-	dialect: "mssql",
-	host: process.env.DB_HOST,
-	port: process.env.DB_PORT,
-	username: process.env.DB_USER,
-	password: process.env.DB_PASSWORD,
-	database: process.env.DB_NAME,
-	dialectOptions: {
-		options: {
-			encrypt: true, // Set to false if using local SQL Server without SSL
-			trustServerCertificate: true, // Required for self-signed certificates
-		},
-	},
-	logging: false,
-});
-
-module.exports = sequelize;*/

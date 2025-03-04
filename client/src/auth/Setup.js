@@ -13,20 +13,20 @@ import {
 } from "@mui/material";
 
 const Setup = () => {
-	const [companyName, setCompanyName] = useState("");
+	const [name, setname] = useState("");
 	const [secretKey, setSecretKey] = useState("");
 	const [message, setMessage] = useState(""); // Success message
 	const navigate = useNavigate();
 
 	const handleSetup = async () => {
-		if (!companyName || !secretKey) {
+		if (!name || !secretKey) {
 			setMessage("⚠️ Please fill in all fields.");
 			return;
 		}
 
 		try {
 			const response = await axios.post("http://localhost:5000/setup", {
-				companyName,
+				name,
 				secretKey,
 			});
 
@@ -61,8 +61,8 @@ const Setup = () => {
 					variant='outlined'
 					fullWidth
 					margin='normal'
-					value={companyName}
-					onChange={(e) => setCompanyName(e.target.value)}
+					value={name}
+					onChange={(e) => setname(e.target.value)}
 				/>
 				<TextField
 					label='Secret Key (Password)'

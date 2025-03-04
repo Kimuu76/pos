@@ -3,25 +3,39 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../database");
 
-const Product = sequelize.define("Product", {
-	id: {
-		type: DataTypes.INTEGER,
-		primaryKey: true, // ✅ Mark as Primary Key
-		autoIncrement: true, // ✅ Enable Auto Increment
+const Product = sequelize.define(
+	"Product",
+	{
+		id: {
+			type: DataTypes.INTEGER,
+			primaryKey: true, // ✅ Primary Key
+			autoIncrement: true, // ✅ Auto Increment
+		},
+		name: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			unique: true, // ✅ Ensures unique product names
+		},
+		purchasePrice: {
+			type: DataTypes.DECIMAL(10, 2), // ✅ More precise for money values
+			allowNull: false,
+			defaultValue: 0.0, // ✅ Prevent null values
+		},
+		sellingPrice: {
+			type: DataTypes.DECIMAL(10, 2),
+			allowNull: false,
+			defaultValue: 0.0,
+		},
+		stock: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 0, // ✅ Ensures stock starts from 0 if not provided
+		},
 	},
-	name: {
-		type: DataTypes.STRING,
-		allowNull: false,
-	},
-	purchasePrice: { type: DataTypes.FLOAT, allowNull: true }, // ✅ Ensure this exists
-	sellingPrice: {
-		type: DataTypes.FLOAT,
-		allowNull: true, // Ensure it's not null
-	},
-	stock: {
-		type: DataTypes.INTEGER,
-		allowNull: false,
-	},
-});
+	{
+		tableName: "Products", // ✅ Explicitly set the table name to be plural
+		timestamps: true, // ✅ Adds createdAt & updatedAt columns
+	}
+);
 
 module.exports = Product;
